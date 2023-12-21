@@ -1,0 +1,81 @@
+{
+  "alert_confirm": "حذف",
+  "alert_cancel": "الغاء",
+  "auth": {
+    "title": "مرحبا بك مجددا",
+    "email_placeholder": "البريد الالكتروني",
+    "password_placeholder": "كلمة السر",
+    "remember_me": "تذكرني",
+    "signin_btn": "تسجيل الدخول"
+  },
+  "home": {
+    "logo_modal": {
+      "title": "تغيير الشعار",
+      "placeholder": " قم بوضع الملف وتركه هنا او",
+      "browse": "اختر ملفا",
+      "confirm_btn": "حفظ",
+      "discard_btn": "الغاء"
+    },
+    "profile_menu": {
+      "title": "الملف الشخصي",
+      "lang": "اللغه",
+      "logout_btn": "تسجيل الخروج"
+    },
+    "banner_news_card": {
+      "title": "انشر خبر لموظفين الشركه",
+      "description": "الأخبار هي إخطارات عامة للموظفين",
+      "btn": "نشر الان",
+      "modal": {
+        "title": "انشاء خبر جديد",
+        "title_input": "*اختر عنوان مناسب",
+        "description_input": "*اكتب وصف الخبر",
+        "file_input": "برجاء اختيار صوره للخير*",
+        "save_post": "نشر"
+      }
+    },
+    "banner_announcements_card": {
+      "title": "انشر اعلان لموظفين الشركه",
+      "description": "الاعلان عباره عن اضافه بانر لمناسبه معينه مثل رمضان، اعياد، ..",
+      "btn": "نشر الان",
+      "modal": {
+        "title": "انشاء اعلان جديد",
+        "file_input": "برجاء اختيار صوره للاعلان*",
+        "save_post": "نشر الاعلان",
+        "save_without_post": "حفظ بدون نشر"
+      }
+    },
+    "special_news": {
+      "title": "الاخبار الخاصه",
+      "more": "عرض الكل",
+      "details": "تفاصيل الخبر",
+      "modal": {
+        "edit_title": "تعديل الخبر",
+        "title_input": "*اختر عنوان مناسب",
+        "description_input": "*اكتب وصف الخبر",
+        "file_input": "برجاء اختيار صوره للخير*",
+        "save_post": "تعديل"
+      }
+    },
+    "special_announcements": {
+      "title": "الاعلانات الخاصه",
+      "more": "عرض الكل",
+      "modal": {
+        "edit_title": "تعديل الاعلان",
+        "edit_period": "تعديل الفتره",
+        "publish": "نشر",
+        "hide": "اخفاء",
+        "alert_title": "حذف الاعلان",
+        "alert_description": "هل انت متاكد من حذف الاعلان"
+      }
+    },
+    "social": {
+      "title": "لينكات منصات التواصل الاجتماعي"
+    },
+    "quick_access": {
+      "title": "الانظمه الخاصه بالشركه"
+    },
+    "wallpapers": {
+      "title": "الخلفيات"
+    }
+  }
+}

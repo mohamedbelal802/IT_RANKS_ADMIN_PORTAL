@@ -1,0 +1,83 @@
+{
+  "alert_confirm": "Delete",
+  "alert_cancel": "Cancel",
+  "auth": {
+    "title": "Welcome back",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "remember_me": "Remember me",
+    "signin_btn": "Log in"
+  },
+  "home": {
+    "logo_modal": {
+      "title": "Change Logo",
+      "placeholder": "Drag and drop a file or",
+      "browse": "Browse",
+      "confirm_btn": "save",
+      "discard_btn": "cancel"
+    },
+    "profile_menu": {
+      "title": "Profile",
+      "lang": "language",
+      "logout_btn": "Log out"
+    },
+    "banner_news_card": {
+      "title": "Publish a news update for vompany employees",
+      "description": "The news is general notifications for the employees",
+      "btn": "Puplish",
+      "modal": {
+        "title": "Create a New News Article",
+        "title_input": "*Choose a suitable headline",
+        "description_input": "*Type a description for new",
+        "file_input": "Please Choose a photo for new*",
+        "save_post": "Publish"
+      }
+    },
+    "banner_announcements_card": {
+      "title": "Publish announcement to Company Employees",
+      "description": "The Announcement Involves Adding a Banner for a Specific Occasion such as Ramadan, Holidays, etc.",
+      "btn": "Puplish",
+      "modal": {
+        "title": "Create new announcement",
+        "title_input": "*Choose a suitable headline",
+        "description_input": "*Type a description for announcement",
+        "file_input": "Please Choose a photo for announcement*",
+        "save_post": "Publish announcement",
+        "save_without_post": "Save with out post"
+      }
+    },
+    "special_news": {
+      "title": "Special news",
+      "more": "Show all",
+      "details": "News details",
+      "modal": {
+        "edit_title": "Edit new article",
+        "title_input": "*Choose a suitable headline",
+        "description_input": "*Type a description for new",
+        "file_input": "Please Choose a photo for new*",
+        "save_post": "Edit"
+      }
+    },
+    "special_announcements": {
+      "title": "Special announcements",
+      "more": "Show all",
+      "modal": {
+        "edit_title": "Edit announcement",
+        "edit_period": "Edit period",
+        "publish": "Publish",
+        "hide": "Hide",
+        "alert_title": "Delete announcement",
+        "alert_description": "Are you sure to delete this announcement"
+      }
+    },
+    "social": {
+      "title": "Social media links"
+    },
+    "quick_access": {
+      "title": "Company systems"
+    },
+    "wallpapers": {
+      "title": "Wallpapers"
+    }
+  }
+}
