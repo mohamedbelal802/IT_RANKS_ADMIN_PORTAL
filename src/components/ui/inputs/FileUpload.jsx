@@ -6,8 +6,18 @@ export default function FileUpload({ name, setFile, sx, children }) {
 
   const onFileSelect = (event) => {
     if (event.target.files.length > 0) {
-      setFile(name, event.target.files);
+      converToBase64(event.target.files[0]);
     }
+  };
+
+  const converToBase64 = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64 = reader.result.replace("image/", "image/image/");
+      console.log(base64);
+      setFile(name, base64);
+    };
   };
 
   const onDrop = (event) => {

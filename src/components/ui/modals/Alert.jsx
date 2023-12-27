@@ -17,7 +17,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function Alert({ open, handleClose, title, text, onSubmit }) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [t] = useTranslation("global");
+
+  const onDeleteSubmit = async () => {
+    setIsLoading(true);
+    await onSubmit();
+    setIsLoading(false);
+  };
   return (
     <React.Fragment>
       <BootstrapDialog
@@ -91,10 +98,11 @@ export default function Alert({ open, handleClose, title, text, onSubmit }) {
           }}
         >
           <Button
-            onClick={onSubmit}
+            onClick={onDeleteSubmit}
             color="warning"
             variant="contained"
             fullWidth={true}
+            disabled={isLoading}
           >
             {t("alert_confirm")}
           </Button>

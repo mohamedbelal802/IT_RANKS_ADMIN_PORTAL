@@ -9,6 +9,7 @@ import closeIcon from "../../../assets/icons/close.svg";
 import { CardMedia } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { specialNewsConfig } from "../../../utils/config";
+import { useSelector } from "react-redux";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -20,11 +21,25 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function NewsDetailsModal() {
+  const { news } = useSelector((state) => state.news);
+  const [data, setDate] = React.useState(null);
   let [searchParams, setSearchParams] = useSearchParams();
   const open = searchParams.get("details") ? true : false;
   const id = searchParams.get("id");
-  const data = specialNewsConfig[id];
   const handleClose = () => setSearchParams("");
+
+  React.useEffect(() => {
+    if (id) {
+      const newArticle = news.find((item) => item.id === +id);
+      if (!newArticle) {
+        setSearchParams("");
+        return;
+      }
+      setDate(newArticle);
+    } else {
+      setSearchParams("");
+    }
+  }, [id]);
   return (
     <BootstrapDialog
       onClose={handleClose}
@@ -61,9 +76,11 @@ export default function NewsDetailsModal() {
         sx={{
           width: "100%",
           aspectRatio: "2/1",
+          maxHeight: "50vh",
           objectFit: "cover",
+          objectPosition: "center",
         }}
-        image={data?.image}
+        image={`data:image/png;base64,${data?.image}`}
       />
       <DialogContent dividers sx={{ borderTop: "0px" }}>
         <Typography
@@ -80,12 +97,19 @@ export default function NewsDetailsModal() {
         <Typography
           sx={{ color: "#2171EC", fontSize: "14px", margin: "16px 0px" }}
         >
-          {data?.date}
+          {new Date(data?.startDate)?.toLocaleDateString(
+            document.dir === "ltr" ? "en-US" : "ar-EG",
+            {
+              weekday: "long", // Display the full name of the day of the week
+              day: "numeric", // Display the day of the month
+              month: "long", // Display the full name of the month
+            }
+          )}
         </Typography>
         <Typography
           sx={{ fontSize: "18px", color: "#617696", fontWeight: "400" }}
         >
-          {data?.description}
+          {data?.content}
         </Typography>
       </DialogContent>
     </BootstrapDialog>

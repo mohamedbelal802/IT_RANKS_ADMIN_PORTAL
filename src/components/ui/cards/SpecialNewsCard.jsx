@@ -9,29 +9,67 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import editIcon from "../../../assets/icons/edit.svg";
 import deleteIcon from "../../../assets/icons/delete.svg";
 import { useNavigate } from "react-router-dom";
+import Alert from "../modals/Alert";
+import { useDispatch } from "react-redux";
+import { deleteNew } from "../../../store/news/newsSlice";
 
 export default function SpecialNewsCard({
-  index,
   image,
+  startDate,
+  endDate,
+  id,
+  content,
   title,
-  description,
-  date,
+  status,
 }) {
-  const navigate = useNavigate();
+  const [alertOpen, setAlertOpen] = useState(false);
   const [t] = useTranslation("global");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleClickOpen = () => navigate(`?details=true&id=${id}`);
 
-  const handleClickOpen = () => navigate(`?details=true&id=${index}`);
+  const handleEditOpen = () => navigate(`?modal=true&id=${id}`);
 
-  const handleEditOpen = () => navigate(`?modal=true&id=${index}`);
+  const handleAlertOpen = () => setAlertOpen(true);
+
+  const onDeleteSubmit = async () => {
+    await dispatch(deleteNew({ id }));
+    setAlertOpen(false);
+  };
+
+  const date = new Date(startDate);
+
+  // Define the options for formatting
+  const options = {
+    weekday: "long", // Display the full name of the day of the week
+    day: "numeric", // Display the day of the month
+    month: "long", // Display the full name of the month
+  };
+
+  // Format the date
+  const formattedDate = date.toLocaleDateString(
+    document.dir === "ltr" ? "en-US" : "ar-EG",
+    options
+  );
 
   return (
     <>
+      {alertOpen && (
+        <Alert
+          open={alertOpen}
+          handleClose={() => setAlertOpen(false)}
+          title={t("home.banner_news_card.alert_delete_title")}
+          text={t("home.banner_news_card.alert_delete_text")}
+          onSubmit={onDeleteSubmit}
+        />
+      )}
+
       <Card
         sx={{ width: "100%", backgroundColor: "#F6F6F6", boxShadow: "none" }}
       >
@@ -42,8 +80,13 @@ export default function SpecialNewsCard({
           <CardMedia
             component="img"
             alt="speical new image"
-            sx={{ height: "100%", width: "100%", objectFit: "cover" }}
-            image={image}
+            sx={{
+              height: "100%",
+              width: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            image={`data:image/png;base64,${image}`}
           />
 
           <div
@@ -60,7 +103,7 @@ export default function SpecialNewsCard({
             }}
             className="card-layer"
           >
-            <IconButton>
+            <IconButton onClick={handleAlertOpen}>
               <CardMedia
                 component={"i"}
                 sx={{
@@ -107,7 +150,7 @@ export default function SpecialNewsCard({
           <Typography
             sx={{ fontSize: "12px", fontWeight: "400", color: "#617696" }}
           >
-            {description}
+            {content}
           </Typography>
         </CardContent>
         <CardActions
@@ -126,7 +169,7 @@ export default function SpecialNewsCard({
             {t("home.special_news.details")}
           </Button>
           <Typography sx={{ fontSize: "14px", color: "#617696" }}>
-            {date}
+            {formattedDate}
           </Typography>
         </CardActions>
       </Card>

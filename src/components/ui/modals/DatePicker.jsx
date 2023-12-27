@@ -1,33 +1,36 @@
 import { Button, Dialog } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { DateRange } from "react-date-range";
 export default function DatePicker({
   open,
   handleClose,
-  setCurrentDate,
   onSubmit,
-  isValid,
+  isLoading,
+  startDate,
+  endDate,
+  setFieldValue,
 }) {
-  const [date, setDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-
   const handleChange = (ranges) => {
-    setDate(ranges.selection);
-    setCurrentDate("date", {
-      startDate: ranges.selection.startDate.toString(),
-      endDate: ranges.selection.endDate.toString(),
-    });
+    setFieldValue("startDate", ranges.selection.startDate.toISOString());
+    setFieldValue("endDate", ranges.selection.endDate.toISOString());
   };
 
   return (
     <Dialog dir="ltr" onClose={handleClose} open={open}>
-      <DateRange minDate={new Date()} ranges={[date]} onChange={handleChange} />
+      <DateRange
+        minDate={new Date()}
+        ranges={[
+          {
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            key: "selection",
+          },
+        ]}
+        onChange={handleChange}
+      />
 
       <Button
-        disabled={!isValid}
+        disabled={isLoading}
         onClick={onSubmit}
         variant="contained"
         color="primary"

@@ -1,29 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/header/Header";
 import { Outlet } from "react-router-dom";
-import NewsModal from "../components/ui/modals/CreateNewsModal";
-import NewsDetails from "../components/ui/modals/NewsDetailsModal";
-import CreateAnnouncmentsModal from "../components/ui/modals/CreateAnnouncmentsModal";
-import EditAnnouncmentsModal from "../components/ui/modals/EditAnnouncmentsModal";
-import SocialModal from "../components/ui/modals/SocialModal";
-import QuickAccessModal from "../components/ui/modals/QuickAccessModal";
-import WallpaperModal from "../components/ui/modals/WallpaperModal";
-import PrivateRoute from "../navigation/protected_routes/PrivateRoute";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllNews } from "../store/news/newsSlice";
+import { api } from "../utils/api";
+import CreateNewsModal from "../components/ui/modals/CreateNewsModal";
+import NewsDetailsModal from "../components/ui/modals/NewsDetailsModal";
 
 export default function MainLayout() {
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    api.defaults.headers.common.Authorization = `${user?.token.tokenType} ${user?.token.accessToken}`;
+    api.defaults.headers.common["Accept-pUserId"] = `${user?.p_user_id}`;
+    dispatch(getAllNews());
+  }, []);
+
   return (
     <>
       <Header />
       <main style={{ backgroundColor: "#F7F7F9" }}>
         <Outlet />
       </main>
-      <NewsModal />
-      <NewsDetails />
-      <CreateAnnouncmentsModal />
-      <EditAnnouncmentsModal />
+      <NewsDetailsModal />
+      {/* <NewsModal />
+      {/* <CreateAnnouncmentsModal /> */}
+      {/* <EditAnnouncmentsModal />
       <SocialModal />
       <QuickAccessModal />
-      <WallpaperModal />
+      <WallpaperModal /> */}
+      <CreateNewsModal />
     </>
   );
 }

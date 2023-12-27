@@ -5,7 +5,8 @@ import { Toaster } from "react-hot-toast";
 import TranslationProvider from "./translation/TranslationProvider.jsx";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Provider } from "react-redux";
-import store from "./store/store.jsx";
+import store, { persistor } from "./store/store.jsx";
+import { PersistGate } from "redux-persist/integration/react";
 
 const theme = createTheme({
   palette: {
@@ -30,7 +31,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ThemeProvider theme={theme}>
       <Toaster position="bottom-left" />
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   </TranslationProvider>

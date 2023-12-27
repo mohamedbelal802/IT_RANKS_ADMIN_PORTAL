@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -21,25 +21,30 @@ import passwordIcon from "../assets/auth/password.svg";
 
 import { useFormik } from "formik";
 import { successToast, warningToast } from "../utils/toasts";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn } from "../store/user/userSlice";
+import { signIn } from "../store/auth/authSlice";
 
 export default function SignIn() {
-  const { status } = useSelector((state) => state.user);
+  const { status, user } = useSelector((state) => state.user);
   const [t] = useTranslation("global");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      userName: "",
       password: "",
-      remember_me: false,
+      // remember_me: false,
     },
     onSubmit: (data) => dispatch(signIn({ data, navigate })),
   });
 
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <section className="signin">
       <Container
@@ -90,13 +95,13 @@ export default function SignIn() {
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <FormInput
-              name={"email"}
+              name={"userName"}
               placeholder={t("auth.email_placeholder")}
-              value={formik.values.email}
+              value={formik.values.userName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors.email}
-              type={"email"}
+              error={formik.errors.userName}
+              type={"userName"}
               sx={{ marginTop: "35px" }}
               icon={emailIcon}
             />
@@ -112,7 +117,7 @@ export default function SignIn() {
               sx={{ marginTop: "24px" }}
               icon={passwordIcon}
             />
-
+            {/* 
             <FormControlLabel
               name="remember_me"
               sx={{
@@ -132,7 +137,7 @@ export default function SignIn() {
               }
               onChange={formik.handleChange}
               label={t("auth.remember_me")}
-            />
+            /> */}
 
             <Button
               color="primary"

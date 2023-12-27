@@ -16,7 +16,9 @@ import FileUpload from "../inputs/FileUpload";
 import closeIcon from "../../../assets/icons/close.svg";
 import imageIcon from "../../../assets/icons/image2.svg";
 import { useSearchParams } from "react-router-dom";
-import { specialNewsConfig } from "../../../utils/config";
+import DatePicker from "./DatePicker";
+import { useDispatch, useSelector } from "react-redux";
+import { createNew } from "../../../store/news/newsSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -29,34 +31,67 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const validationsForm = yup.object({
   title: yup.string().required("Required"),
-  description: yup.string().required("Required"),
+  content: yup.string().required("Required"),
   image: yup.string().required("Required"),
+  // date: yup.object({
+  //   startDate: yup.date(),
+  //   endDate: yup.date(),
+  // }),
 });
 
-export default function NewsModal() {
+export default function CreateNewsModal() {
+  const { news } = useSelector((state) => state.news);
   let [searchParams, setSearchParams] = useSearchParams();
+  const [datePicker, setDatePicker] = React.useState(false);
   const [t] = useTranslation("global");
   const open = searchParams.get("modal") ? true : false;
   const id = searchParams.get("id");
 
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       title: "",
-      description: "",
+      content: "",
       image: "",
+      startDate: new Date(),
+      endDate: new Date(),
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      if (id) {
+        console.log("edit");
+      } else {
+        await dispatch(createNew({ data: values }));
+      }
+      setDatePicker(false);
+      formik.setValues({
+        title: "",
+        content: "",
+        image: "",
+        startDate: new Date(),
+        endDate: new Date(),
+      });
+      setSearchParams("");
+      setSubmitting(false);
     },
     validationSchema: validationsForm,
-    onSubmit: (values) => saveNewHandler(values),
     validateOnMount: true,
   });
-
-  const handleClose = () => {
-    formik.setValues({ title: "", description: "", image: "" });
-    setSearchParams("");
+  const handleDatePickerClose = () => {
+    setDatePicker(false);
   };
 
-  const saveNewHandler = (data) => {
-    console.log(data);
+  console.log(formik.values.startDate);
+  const handleClose = () => {
+    formik.setValues({
+      title: "",
+      content: "",
+      image: "",
+      startDate: new Date(),
+      endDate: new Date(),
+    });
+    setSearchParams("");
   };
 
   const removeImg = (e) => {
@@ -65,10 +100,20 @@ export default function NewsModal() {
 
   React.useEffect(() => {
     if (id) {
-      const data = specialNewsConfig[id];
-      formik.setFieldValue("title", data.title);
-      formik.setFieldValue("description", data.description);
-      formik.setFieldValue("image", data.image);
+      const newArticle = news.find((item) => item.id === +id);
+      if (!newArticle) {
+        setSearchParams("");
+        return;
+      }
+
+      formik.setFieldValue("title", newArticle.title);
+      formik.setFieldValue("content", newArticle.content);
+      formik.setFieldValue(
+        "image",
+        `data:image/png;base64,${newArticle.image}`
+      );
+      formik.setFieldValue("startDate", newArticle.startDate);
+      formik.setFieldValue("endDate", newArticle.endDate);
     }
   }, [id]);
   return (
@@ -128,8 +173,8 @@ export default function NewsModal() {
           <DialogContent dividers sx={{ borderColor: "#ccc" }}>
             <textarea
               onChange={formik.handleChange}
-              value={formik.values.description}
-              name={"description"}
+              value={formik.values.content}
+              name={"content"}
               placeholder={t("home.banner_news_card.modal.title_input")}
               style={{
                 border: "none",
@@ -145,7 +190,7 @@ export default function NewsModal() {
             <FileUpload
               sx={{
                 aaspectRatio: "unset",
-                height: "160px",
+                height: "200px",
                 backgroundColor: "#F5F5F5",
               }}
               name={"image"}
@@ -177,11 +222,7 @@ export default function NewsModal() {
                   </IconButton>
                   <CardMedia
                     component={"img"}
-                    image={
-                      typeof formik.values.image === "object"
-                        ? URL.createObjectURL(formik.values.image[0])
-                        : formik.values.image
-                    }
+                    image={formik.values.image && formik.values.image}
                     sx={{ width: "100%", height: "100%", objectFit: "contain" }}
                   />
                 </Box>
@@ -216,13 +257,46 @@ export default function NewsModal() {
             color="primary"
             variant="contained"
             disabled={!formik.isValid}
-            sx={{ color: "white", marginLeft: "auto" }}
-            onClick={formik.submitForm}
+            sx={{
+              color: "white",
+              marginLeft: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              "&.Mui-disabled": {
+                color: "white",
+              },
+            }}
+            onClick={() => setDatePicker(true)}
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6.75 3V5.25M17.25 3V5.25M3 18.75V7.5C3 6.90326 3.23705 6.33097 3.65901 5.90901C4.08097 5.48705 4.65326 5.25 5.25 5.25H18.75C19.3467 5.25 19.919 5.48705 20.341 5.90901C20.7629 6.33097 21 6.90326 21 7.5V18.75M3 18.75C3 19.3467 3.23705 19.919 3.65901 20.341C4.08097 20.7629 4.65326 21 5.25 21H18.75C19.3467 21 19.919 20.7629 20.341 20.341C20.7629 19.919 21 19.3467 21 18.75M3 18.75V11.25C3 10.6533 3.23705 10.081 3.65901 9.65901C4.08097 9.23705 4.65326 9 5.25 9H18.75C19.3467 9 19.919 9.23705 20.341 9.65901C20.7629 10.081 21 10.6533 21 11.25V18.75"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
             {t("home.banner_news_card.modal.save_post")}
           </Button>
         </DialogActions>
       </BootstrapDialog>
+      <DatePicker
+        open={datePicker}
+        handleClose={handleDatePickerClose}
+        isLoading={formik.isSubmitting}
+        startDate={formik.values.startDate}
+        endDate={formik.values.endDate}
+        setFieldValue={formik.setFieldValue}
+        onSubmit={formik.submitForm}
+      />
     </React.Fragment>
   );
 }

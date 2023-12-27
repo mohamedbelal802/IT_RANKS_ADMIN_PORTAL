@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 
 import profileIcon from "../../assets/icons/profile.svg";
 import { useDispatch } from "react-redux";
-import { signOut } from "../../store/user/userSlice";
+import { signOut } from "../../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfileMenuOption({ handleClose }) {

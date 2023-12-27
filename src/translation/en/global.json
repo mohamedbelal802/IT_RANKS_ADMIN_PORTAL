@@ -25,6 +25,9 @@
       "title": "Publish a news update for vompany employees",
       "description": "The news is general notifications for the employees",
       "btn": "Puplish",
+      "alert_delete_title": "Delele new ?",
+      "alert_delete_text": "Are you sure to delete this new ?",
+
       "modal": {
         "title": "Create a New News Article",
         "title_input": "*Choose a suitable headline",
@@ -50,6 +53,7 @@
       "title": "Special news",
       "more": "Show all",
       "details": "News details",
+      "no_news": "There is no news",
       "modal": {
         "edit_title": "Edit new article",
         "title_input": "*Choose a suitable headline",
