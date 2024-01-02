@@ -83,5 +83,8 @@
     "wallpapers": {
       "title": "Wallpapers"
     }
+  },
+  "news": {
+    "all_news": "All special news"
   }
 }

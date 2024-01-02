@@ -18,6 +18,13 @@
   font-size: 24px !important;
 }
 
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -42,4 +49,10 @@ input.normalize:hover {
 
 .special-news-card:hover .card-layer {
   opacity: 1 !important;
+}
+
+.line-clamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }/*# sourceMappingURL=app.css.map */

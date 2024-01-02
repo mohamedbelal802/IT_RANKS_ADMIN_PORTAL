@@ -12,7 +12,7 @@ export default function Loader() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         },
-        height: "10vh",
+        height: "20vh",
       }}
     >
       <CircularProgress color="primary" />

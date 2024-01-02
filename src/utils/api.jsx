@@ -18,3 +18,18 @@ export const apiForm = axios.create({
     "Content-Type": "multipart/form-data",
   },
 });
+
+api.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  async (error) => {
+    const status = error.response ? error.response.status : null;
+    if (status === 401) {
+      window.sessionStorage.clear();
+      window.location.replace("/auth/sigin");
+      return;
+    }
+    throw error;
+  }
+);

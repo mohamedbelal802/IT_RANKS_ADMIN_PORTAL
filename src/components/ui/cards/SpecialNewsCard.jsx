@@ -148,7 +148,14 @@ export default function SpecialNewsCard({
             {title}
           </Typography>
           <Typography
-            sx={{ fontSize: "12px", fontWeight: "400", color: "#617696" }}
+            className="line-clamp"
+            sx={{
+              fontSize: "12px",
+              fontWeight: "400",
+              color: "#617696",
+              WebkitLineClamp: "2",
+              lineClamp: "2",
+            }}
           >
             {content}
           </Typography>
