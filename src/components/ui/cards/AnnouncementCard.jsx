@@ -4,11 +4,17 @@ import React from "react";
 import editIcon from "../../../assets/icons/edit.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function AnnouncementCard({ image, date }) {
+export default function AnnouncementCard({
+  image,
+  startDate,
+  endDate,
+  status,
+  id,
+}) {
   const navigate = useNavigate();
   const onEditClick = () =>
     navigate("?editAnn=true", {
-      state: { image, date },
+      state: { image, startDate, endDate, id, status },
     });
   return (
     <>
@@ -20,8 +26,13 @@ export default function AnnouncementCard({ image, date }) {
           <CardMedia
             component="img"
             alt="speical new image"
-            sx={{ height: "100%", width: "100%", objectFit: "cover" }}
-            image={image}
+            sx={{
+              height: "100%",
+              width: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            image={`data:image/png;base64,${image}`}
           />
 
           <div

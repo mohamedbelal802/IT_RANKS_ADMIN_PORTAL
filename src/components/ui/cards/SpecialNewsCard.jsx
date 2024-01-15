@@ -71,7 +71,11 @@ export default function SpecialNewsCard({
       )}
 
       <Card
-        sx={{ width: "100%", backgroundColor: "#F6F6F6", boxShadow: "none" }}
+        sx={{
+          width: "100%",
+          backgroundColor: "#F6F6F6",
+          boxShadow: "none",
+        }}
       >
         <Box
           className="special-news-card"
@@ -140,7 +144,14 @@ export default function SpecialNewsCard({
         </Box>
         <CardContent sx={{ padding: "12px 9px" }}>
           <Typography
-            sx={{ fontSize: "16px", fontWeight: "700", color: "#4E5D78" }}
+            className="line-clamp"
+            sx={{
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#4E5D78",
+              WebkitLineClamp: "1",
+              lineClamp: "1",
+            }}
             gutterBottom
             variant="h5"
             component="div"
@@ -155,6 +166,7 @@ export default function SpecialNewsCard({
               color: "#617696",
               WebkitLineClamp: "2",
               lineClamp: "2",
+              letterSpacing: "0.5px",
             }}
           >
             {content}
@@ -171,7 +183,7 @@ export default function SpecialNewsCard({
           <Button
             onClick={handleClickOpen}
             size="small"
-            sx={{ fontSize: "14px", fontWeight: "500" }}
+            sx={{ fontSize: "14px", fontWeight: "500", textTransform: "unset" }}
           >
             {t("home.special_news.details")}
           </Button>

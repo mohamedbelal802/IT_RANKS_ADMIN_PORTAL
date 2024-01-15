@@ -17,6 +17,8 @@ import closeIcon from "../../../assets/icons/close.svg";
 import imageIcon from "../../../assets/icons/image2.svg";
 import { useSearchParams } from "react-router-dom";
 import DatePicker from "./DatePicker";
+import { useDispatch } from "react-redux";
+import { createAnnouncment } from "../../../store/announcements/announcementSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -29,10 +31,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const validationsForm = yup.object({
   image: yup.string().required("Required"),
-  date: yup.object().shape({
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-  }),
 });
 
 export default function CreateAnnouncmentsModal() {
@@ -40,10 +38,27 @@ export default function CreateAnnouncmentsModal() {
   const [datePicker, setDatePicker] = React.useState(false);
   const [t] = useTranslation("global");
   const open = searchParams.get("announcements") ? true : false;
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
       image: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      status: "",
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      await dispatch(createAnnouncment({ data: values }));
+      setDatePicker(false);
+      formik.setValues({
+        image: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        status: "",
+      });
+      setSearchParams("");
+      setSubmitting(false);
     },
     validationSchema: validationsForm,
     validateOnMount: true,
@@ -51,29 +66,34 @@ export default function CreateAnnouncmentsModal() {
 
   const handleClose = () => {
     setSearchParams("");
-    formik.setValues({ image: "" });
+    formik.setValues({
+      image: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      status: "",
+    });
   };
   const removeImg = (e) => {
     formik.setFieldValue("image", "");
   };
 
-  const handleDatePickerOpen = () => {
-    setDatePicker(true);
-  };
   const handleDatePickerClose = () => {
     setDatePicker(false);
   };
 
-  const onSaveWithPost = () => {
-    handleDatePickerClose();
-    handleClose();
-    console.log(formik.values);
-  };
+  // const onSaveWithOutPost = () => {
+  //   formik.setFieldValue("status", "OFF");
+  //   formik.handleSubmit();
+  //   handleClose();
+  //   console.log(formik.values);
+  // };
 
-  const onSaveWithOutPost = () => {
-    handleClose();
-    console.log(formik.values);
-  };
+  // const onSaveWithPost = () => {
+  //   formik.setFieldValue("status", "ON");
+  //   console.log("form suubmited", formik.values);
+  //   // formik.handleSubmit();
+  //   // handleClose();
+  // };
 
   return (
     <React.Fragment>
@@ -146,11 +166,7 @@ export default function CreateAnnouncmentsModal() {
                   </IconButton>
                   <CardMedia
                     component={"img"}
-                    image={
-                      typeof formik.values.image === "object"
-                        ? URL.createObjectURL(formik.values.image[0])
-                        : formik.values.image
-                    }
+                    image={formik.values.image}
                     sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </Box>
@@ -192,8 +208,8 @@ export default function CreateAnnouncmentsModal() {
             color="primary"
             variant="contained"
             disabled={formik.values.image ? false : true}
-            sx={{ color: "white" }}
-            onClick={handleDatePickerOpen}
+            sx={{ color: "white", textTransform: "unset" }}
+            onClick={() => setDatePicker(true)}
           >
             {t("home.banner_announcements_card.modal.save_post")}
           </Button>
@@ -204,7 +220,7 @@ export default function CreateAnnouncmentsModal() {
             disabled={formik.values.image ? false : true}
             sx={{
               color: "primary.dark",
-
+              textTransform: "unset",
               bgcolor: "primary.light",
               boxShadow: "none",
               "&:hover": {
@@ -212,7 +228,10 @@ export default function CreateAnnouncmentsModal() {
                 color: "white",
               },
             }}
-            onClick={onSaveWithOutPost}
+            onClick={() => {
+              formik.setFieldValue("status", "OFF");
+              formik.handleSubmit();
+            }}
           >
             {t("home.banner_announcements_card.modal.save_without_post")}
           </Button>
@@ -222,9 +241,14 @@ export default function CreateAnnouncmentsModal() {
       <DatePicker
         open={datePicker}
         handleClose={handleDatePickerClose}
-        setCurrentDate={formik.setFieldValue}
-        onSubmit={onSaveWithPost}
-        isValid={formik.isValid}
+        isLoading={formik.isSubmitting}
+        startDate={formik.values.startDate}
+        endDate={formik.values.endDate}
+        setFieldValue={formik.setFieldValue}
+        onSubmit={() => {
+          formik.setFieldValue("status", "ON");
+          formik.handleSubmit();
+        }}
       />
     </React.Fragment>
   );

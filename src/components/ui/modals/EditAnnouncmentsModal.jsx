@@ -15,6 +15,11 @@ import closeIcon from "../../../assets/icons/close.svg";
 import { useLocation, useSearchParams } from "react-router-dom";
 import DatePicker from "./DatePicker";
 import Alert from "./Alert";
+import { useDispatch } from "react-redux";
+import {
+  deleteAnnouncement,
+  updateAnnouncement,
+} from "../../../store/announcements/announcementSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -26,10 +31,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const validationsForm = yup.object({
-  date: yup.object().shape({
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-  }),
+  image: yup.string().required(),
 });
 
 export default function EditAnnouncmentsModal() {
@@ -39,21 +41,35 @@ export default function EditAnnouncmentsModal() {
   const [t] = useTranslation("global");
   const open = searchParams.get("editAnn") ? true : false;
   const { state } = useLocation();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
       image: "",
+      status: "",
+      startDate: new Date(),
+      endDate: new Date(),
     },
     validationSchema: validationsForm,
     validateOnMount: true,
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      await dispatch(updateAnnouncement({ id: state.id, data: { ...values } }));
+      setDatePicker(false);
+      formik.setValues({
+        image: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        status: "",
+      });
+      setSearchParams("");
+      setSubmitting(false);
+    },
   });
 
   const handleClose = () => {
     formik.setValues({ image: "" });
     setSearchParams("");
-  };
-  const removeImg = (e) => {
-    formik.setFieldValue("image", "");
   };
 
   const handleDatePickerOpen = () => {
@@ -61,12 +77,6 @@ export default function EditAnnouncmentsModal() {
   };
   const handleDatePickerClose = () => {
     setDatePicker(false);
-  };
-
-  const onSaveWithPost = () => {
-    handleDatePickerClose();
-    handleClose();
-    console.log(formik.values);
   };
 
   const onSaveWithOutPost = () => {
@@ -78,14 +88,28 @@ export default function EditAnnouncmentsModal() {
     setAlert(true);
   };
 
-  const onDeleteSubmit = () => {
-    console.log("submited");
+  const onDeleteSubmit = async () => {
+    await dispatch(deleteAnnouncement({ id: state.id }));
     closeDeleteAlert();
+    setSearchParams("");
   };
-
+  console.log(state);
   const closeDeleteAlert = () => {
     setAlert(false);
   };
+
+  React.useEffect(() => {
+    if (!state) {
+      setSearchParams("");
+      return;
+    }
+    formik.setValues({
+      image: state.image,
+      startDate: new Date(state.startDate),
+      endDate: new Date(state.endDate),
+      status: state.status,
+    });
+  }, [state]);
 
   return (
     <React.Fragment>
@@ -108,7 +132,7 @@ export default function EditAnnouncmentsModal() {
             {t("home.special_announcements.modal.edit_title")}
           </DialogTitle>
           <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            {state?.date ? (
+            {state?.status === "ON" ? (
               <>
                 <Button
                   color="primary"
@@ -121,6 +145,7 @@ export default function EditAnnouncmentsModal() {
                     minWidth: "unset",
                     boxShadow: "none",
                     borderRadius: "8px",
+                    textTransform: "unset",
                   }}
                   onClick={handleDatePickerOpen}
                 >
@@ -145,6 +170,11 @@ export default function EditAnnouncmentsModal() {
                 </Button>
 
                 <Button
+                  disabled={formik.isSubmitting}
+                  onClick={() => {
+                    formik.setFieldValue("status", "OFF");
+                    formik.submitForm();
+                  }}
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -155,6 +185,7 @@ export default function EditAnnouncmentsModal() {
                     bgcolor: "#EFEFEF",
                     boxShadow: "none",
                     borderRadius: "8px",
+                    textTransform: "unset",
                   }}
                 >
                   <Typography sx={{ display: { xs: "none", sm: "block" } }}>
@@ -195,6 +226,8 @@ export default function EditAnnouncmentsModal() {
                   padding: { xs: "6px 6px", md: "14px 16px" },
                   minWidth: "unset",
                   boxShadow: "none",
+                  textTransform: "unset",
+
                   borderRadius: "8px",
                 }}
                 onClick={handleDatePickerOpen}
@@ -267,7 +300,7 @@ export default function EditAnnouncmentsModal() {
         <DialogContent dividers>
           <CardMedia
             component={"img"}
-            image={state?.image}
+            image={`data:image/png;base64,${formik.values.image}`}
             sx={{ width: "100%", height: "329px", objectFit: "cover" }}
           />
         </DialogContent>
@@ -276,9 +309,14 @@ export default function EditAnnouncmentsModal() {
       <DatePicker
         open={datePicker}
         handleClose={handleDatePickerClose}
-        setCurrentDate={formik.setFieldValue}
-        onSubmit={onSaveWithPost}
-        isValid={formik.isValid}
+        isLoading={formik.isSubmitting}
+        startDate={formik.values.startDate}
+        endDate={formik.values.endDate}
+        setFieldValue={formik.setFieldValue}
+        onSubmit={() => {
+          formik.setFieldValue("status", "ON");
+          formik.submitForm();
+        }}
       />
 
       <Alert

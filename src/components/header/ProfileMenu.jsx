@@ -3,8 +3,10 @@ import { Backdrop, Button, CardMedia, Typography } from "@mui/material";
 import profileIcon from "../../assets/icons/profile.svg";
 import arrowIcon from "../../assets/icons/chevron-down.svg";
 import ProfileMenuOption from "./ProfileMenuOption";
+import { useSelector } from "react-redux";
 
 export default function ProfileMenu() {
+  const { user } = useSelector((state) => state.user);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -37,7 +39,7 @@ export default function ProfileMenu() {
               fontSize: { xs: "12px", md: "16px" },
             }}
           >
-            عمر احمد الالفي
+            {user?.employee?.disp_NAME}
           </Typography>
 
           <CardMedia

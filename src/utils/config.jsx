@@ -88,7 +88,33 @@ import linkedin from "../assets/icons/linkedin.svg";
 import x from "../assets/icons/x.svg";
 import github from "../assets/icons/github.svg";
 import website from "../assets/icons/website.svg";
-export const socialConfig = [
+export const socialConfig = {
+  1: {
+    name: "Facebook",
+    icon: facebook,
+  },
+  2: {
+    name: "Instagram",
+    icon: instagram,
+  },
+  3: {
+    name: "X",
+    icon: x,
+  },
+  4: {
+    name: "Linkedin",
+    icon: linkedin,
+  },
+  5: {
+    name: "Github",
+    icon: github,
+  },
+  6: {
+    name: "Website",
+    icon: website,
+  },
+};
+export const socialConfigt = [
   {
     name: "فيس بوك",
     icon: facebook,

@@ -8,6 +8,10 @@ export default function LangToggler() {
   const handleLanguageCahange = () => {
     document.dir = i18n.language === "en" ? "rtl" : "ltr";
     i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+    // localStorage.setItem(
+    //   "lang",
+    //   JSON.stringify(i18n === "en" ? "American" : "Arabic")
+    // );
   };
   return (
     <Box

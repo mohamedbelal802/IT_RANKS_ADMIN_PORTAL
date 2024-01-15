@@ -46,7 +46,7 @@
         "description_input": "*Type a description for announcement",
         "file_input": "Please Choose a photo for announcement*",
         "save_post": "Publish announcement",
-        "save_without_post": "Save with out post"
+        "save_without_post": "Save without post"
       }
     },
     "special_news": {
@@ -65,6 +65,7 @@
     "special_announcements": {
       "title": "Special announcements",
       "more": "Show all",
+      "no_announcements": "There is no announcements",
       "modal": {
         "edit_title": "Edit announcement",
         "edit_period": "Edit period",

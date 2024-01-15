@@ -5,11 +5,11 @@ import addIcon from "../../../assets/icons/add.svg";
 import editIcon from "../../../assets/icons/secondary-edit.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function SocialCard({ icon, name, href }) {
+export default function SocialCard({ icon, name, href, id }) {
   const navigate = useNavigate();
 
   const handleOpen = () =>
-    navigate("?social=true", { state: { icon, name, href } });
+    navigate("?social=true", { state: { icon, name, href, id } });
   return (
     <Card
       style={{

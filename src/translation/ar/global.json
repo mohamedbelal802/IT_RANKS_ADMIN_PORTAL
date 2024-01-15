@@ -62,6 +62,7 @@
     "special_announcements": {
       "title": "الاعلانات الخاصه",
       "more": "عرض الكل",
+      "no_announcements": "لا توجد اعلانات",
       "modal": {
         "edit_title": "تعديل الاعلان",
         "edit_period": "تعديل الفتره",

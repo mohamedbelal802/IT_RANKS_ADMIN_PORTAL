@@ -13,6 +13,8 @@ import { Box, CardMedia } from "@mui/material";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { updateSocialMedia } from "../../../store/socialMedia/socialMediaSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -26,14 +28,17 @@ const validationsForm = yup.object({
   title: yup.string().required("Required"),
 });
 export default function SocialModal() {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { state } = useLocation();
+  const dispatch = useDispatch();
   const open = searchParams.get("social") ? true : false;
   // const [open, setOpen] = React.useState(false);
   const [t] = useTranslation("global");
   const formik = useFormik({
     initialValues: {
       title: "",
+      url: "",
     },
     validationSchema: validationsForm,
     validateOnMount: true,
@@ -42,10 +47,26 @@ export default function SocialModal() {
   const handleClose = () => {
     setSearchParams("");
     formik.setFieldValue("title", "");
+    formik.setFieldValue("url", "");
   };
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+    await dispatch(
+      updateSocialMedia({
+        title: formik.values.title.toLowerCase(),
+        url: formik.values.url,
+        id: state?.id,
+      })
+    );
+    handleClose();
+    setIsLoading(false);
+  };
+
   React.useEffect(() => {
-    if (state?.href) {
-      formik.setFieldValue("title", state.href);
+    if (state?.name) {
+      formik.setFieldValue("title", state?.name);
+      formik.setFieldValue("url", state.href);
     }
   }, [state]);
   return (
@@ -145,8 +166,8 @@ export default function SocialModal() {
             </label>
             <input
               onChange={formik.handleChange}
-              value={formik.values.title}
-              name="title"
+              value={formik.values.url}
+              name="url"
               style={{
                 width: "100%",
                 padding: "10px 8px",
@@ -160,12 +181,12 @@ export default function SocialModal() {
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={!formik.isValid}
+            disabled={!formik.isValid || isLoading}
             variant="contained"
             color="primary"
             sx={{ marginLeft: "auto" }}
             autoFocus
-            onClick={handleClose}
+            onClick={onSubmit}
           >
             حفظ
           </Button>

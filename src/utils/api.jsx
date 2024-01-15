@@ -6,7 +6,7 @@ export const api = axios.create({
   withCredentials: false,
   headers: {
     "Content-Type": "application/json",
-    "Accept-Language": document.dir === "rtl" ? "Arabic" : "American",
+    "Accept-Language": document.dir === "ltr" ? "American" : "Arabic",
   },
 });
 
@@ -25,9 +25,9 @@ api.interceptors.response.use(
   },
   async (error) => {
     const status = error.response ? error.response.status : null;
-    if (status === 401) {
+    if (status === 401 && !error.response.data.responseMessage) {
       window.sessionStorage.clear();
-      window.location.replace("/auth/sigin");
+      window.location.replace("/signin");
       return;
     }
     throw error;

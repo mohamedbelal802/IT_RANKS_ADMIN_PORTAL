@@ -15,18 +15,18 @@ import closeIcon from "../../assets/icons/close.svg";
 import { useTranslation } from "react-i18next";
 
 import profileIcon from "../../assets/icons/profile.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfileMenuOption({ handleClose }) {
+  const { user } = useSelector((state) => state.user);
   const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //   const [lang, setLang] = useState(i18n.language);
 
   const handleLanguageCahange = (lang) => {
-    console.log(lang);
     document.dir = lang === "en" ? "ltr" : "rtl";
     i18n.changeLanguage(lang);
   };
@@ -155,7 +155,7 @@ export default function ProfileMenuOption({ handleClose }) {
                   fontSize: { xs: "12px", md: "16px" },
                 }}
               >
-                عمر احمد الالفي
+                {user?.employee?.disp_NAME}
               </Typography>
 
               <Typography
@@ -165,7 +165,7 @@ export default function ProfileMenuOption({ handleClose }) {
                   fontSize: { xs: "10px", md: "14px" },
                 }}
               >
-                مصمم منتجات رقميه
+                {user?.employee?.job_NAME}
               </Typography>
             </div>
           </Box>

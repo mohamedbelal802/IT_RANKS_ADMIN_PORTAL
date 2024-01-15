@@ -60,7 +60,7 @@ export default function CreateNewsModal() {
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       if (id) {
-        console.log("edit");
+        // dispatch(edi)
       } else {
         await dispatch(createNew({ data: values }));
       }
@@ -82,7 +82,6 @@ export default function CreateNewsModal() {
     setDatePicker(false);
   };
 
-  console.log(formik.values.startDate);
   const handleClose = () => {
     formik.setValues({
       title: "",
@@ -114,6 +113,14 @@ export default function CreateNewsModal() {
       );
       formik.setFieldValue("startDate", newArticle.startDate);
       formik.setFieldValue("endDate", newArticle.endDate);
+    } else {
+      formik.setValues({
+        title: "",
+        content: "",
+        image: "",
+        startDate: new Date(),
+        endDate: new Date(),
+      });
     }
   }, [id]);
   return (
@@ -266,6 +273,7 @@ export default function CreateNewsModal() {
               "&.Mui-disabled": {
                 color: "white",
               },
+              textTransform: "capitalize",
             }}
             onClick={() => setDatePicker(true)}
           >

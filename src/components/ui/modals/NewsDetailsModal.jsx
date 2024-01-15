@@ -22,11 +22,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function NewsDetailsModal() {
   const { news } = useSelector((state) => state.news);
-  const [data, setDate] = React.useState(null);
+  const [data, setData] = React.useState(null);
   let [searchParams, setSearchParams] = useSearchParams();
   const open = searchParams.get("details") ? true : false;
   const id = searchParams.get("id");
-  const handleClose = () => setSearchParams("");
+  const handleClose = () => {
+    setSearchParams("");
+    setData(null);
+  };
 
   React.useEffect(() => {
     if (id) {
@@ -35,7 +38,7 @@ export default function NewsDetailsModal() {
         setSearchParams("");
         return;
       }
-      setDate(newArticle);
+      setData(newArticle);
     } else {
       setSearchParams("");
     }
