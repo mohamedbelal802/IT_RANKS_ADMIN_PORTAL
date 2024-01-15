@@ -10,8 +10,8 @@ import { useTranslation } from "react-i18next";
 export default function News() {
   const navigate = useNavigate();
   const { t } = useTranslation("global");
-  const { news, status } = useSelector((state) => state.news);
-  const cardList = news.map((item, index) => (
+  const { list, status } = useSelector((state) => state.news);
+  const cardList = list.map((item) => (
     <Grid key={item.id} item xs={12} sm={6} md={4} lg={3}>
       <SpecialNewsCard
         image={item.image}

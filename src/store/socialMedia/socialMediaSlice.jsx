@@ -4,7 +4,7 @@ import { successToast } from "../../utils/toasts";
 
 const INITIA_STATE = {
   status: "idle",
-  socialMedia: [],
+  list: [],
   errMsg: "",
 };
 
@@ -49,13 +49,13 @@ const socialMediaSlice = createSlice({
       })
       .addCase(getAllSocialMedia.fulfilled, (state, action) => {
         state.status = "success";
-        state.socialMedia = action.payload;
+        state.list = action.payload;
       })
       .addCase(getAllSocialMedia.rejected, (state, action) => {
         state.status = "error";
       })
       .addCase(updateSocialMedia.fulfilled, (state, action) => {
-        state.socialMedia = state.socialMedia.map((item) =>
+        state.list = state.list.map((item) =>
           item.id === action.meta.arg.id
             ? { ...item, url: action.meta.arg.url }
             : item

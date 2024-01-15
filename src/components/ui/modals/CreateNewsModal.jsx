@@ -40,7 +40,7 @@ const validationsForm = yup.object({
 });
 
 export default function CreateNewsModal() {
-  const { news } = useSelector((state) => state.news);
+  const { list } = useSelector((state) => state.news);
   let [searchParams, setSearchParams] = useSearchParams();
   const [datePicker, setDatePicker] = React.useState(false);
   const [t] = useTranslation("global");
@@ -99,7 +99,7 @@ export default function CreateNewsModal() {
 
   React.useEffect(() => {
     if (id) {
-      const newArticle = news.find((item) => item.id === +id);
+      const newArticle = list.find((item) => item.id === +id);
       if (!newArticle) {
         setSearchParams("");
         return;

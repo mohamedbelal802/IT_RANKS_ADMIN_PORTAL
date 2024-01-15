@@ -8,10 +8,10 @@ import { useSelector } from "react-redux";
 import Loader from "../ui/loading/Loader";
 
 export default function SocialSection() {
-  const { socialMedia, status } = useSelector((state) => state.social_media);
+  const { list, status } = useSelector((state) => state.social_media);
   const [t] = useTranslation("global");
 
-  const cardList = socialMedia.map((item) => (
+  const cardList = list.map((item) => (
     <Grid key={item.id} item xs={12} md={6} lg={4}>
       <SocialCard
         name={socialConfig[item.id].name}

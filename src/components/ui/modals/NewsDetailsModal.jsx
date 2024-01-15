@@ -21,7 +21,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function NewsDetailsModal() {
-  const { news } = useSelector((state) => state.news);
+  const { list } = useSelector((state) => state.news);
   const [data, setData] = React.useState(null);
   let [searchParams, setSearchParams] = useSearchParams();
   const open = searchParams.get("details") ? true : false;
@@ -33,7 +33,7 @@ export default function NewsDetailsModal() {
 
   React.useEffect(() => {
     if (id) {
-      const newArticle = news.find((item) => item.id === +id);
+      const newArticle = list.find((item) => item.id === +id);
       if (!newArticle) {
         setSearchParams("");
         return;

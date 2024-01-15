@@ -4,7 +4,7 @@ import { successToast } from "../../utils/toasts";
 
 const INITIAL_STATE = {
   status: "idle",
-  news: [],
+  list: [],
   errMsg: "",
 };
 
@@ -59,7 +59,7 @@ const newsSlice = createSlice({
       })
       .addCase(getAllNews.fulfilled, (state, action) => {
         state.status = "success";
-        state.news = action.payload;
+        state.list = action.payload;
       })
       .addCase(getAllNews.rejected, (state, action) => {
         state.status = "error";
@@ -69,7 +69,7 @@ const newsSlice = createSlice({
         console.log(action.payload);
       })
       .addCase(deleteNew.fulfilled, (state, action) => {
-        state.news = state.news.filter(
+        state.list = state.list.filter(
           (item) => item.id !== action.meta.arg.id
         );
       });

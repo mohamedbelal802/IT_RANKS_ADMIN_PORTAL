@@ -7,6 +7,7 @@ import persistStore from "redux-persist/es/persistStore";
 import newsSlice from "./news/newsSlice";
 import announcementSlice from "./announcements/announcementSlice";
 import socialMediaSlice from "./socialMedia/socialMediaSlice";
+import quickAccessSlice from "./quickaccess/quickAccessSlice";
 
 const persistConfig = {
   key: "root", // The key to use for storing the data in local storage
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   news: newsSlice,
   announcement: announcementSlice,
   social_media: socialMediaSlice,
+  quick_access: quickAccessSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

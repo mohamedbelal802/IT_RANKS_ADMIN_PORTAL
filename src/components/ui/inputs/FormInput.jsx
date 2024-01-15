@@ -11,7 +11,7 @@ const StyledInput = styled(TextField)`
   }
   & fieldset {
     border-color: #4e5d78 !important;
-    border-radius: 14px;
+    border-radius: 8px;
     &.Mui-focused fieldset {
       border-color: white !important;
     }

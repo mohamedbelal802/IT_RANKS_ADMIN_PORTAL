@@ -153,7 +153,7 @@ export default function AnnouncementsSection() {
                 slidesPerView: 3,
               },
             }}
-            dir={document.body.dir}
+            key={document.dir}
             navigation
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}

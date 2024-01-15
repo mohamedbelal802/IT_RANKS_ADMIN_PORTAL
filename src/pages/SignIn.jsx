@@ -147,6 +147,8 @@ export default function SignIn() {
                 marginTop: "35px",
                 color: "#FFFFFF",
                 textTransform: "capitalize",
+                borderRadius: "8px",
+                paddingY: "10px",
               }}
               fullWidth={true}
               type="submit"

@@ -14,12 +14,12 @@ import { useSelector } from "react-redux";
 import Loader from "../ui/loading/Loader";
 
 export default function SpecialNewsSection() {
-  const { news, status } = useSelector((state) => state.news);
+  const { list, status } = useSelector((state) => state.news);
   const [t] = useTranslation("global");
 
   const cardList =
-    news.length > 0 ? (
-      news.map((item) => (
+    list.length > 0 ? (
+      list.map((item) => (
         <SwiperSlide key={item.id}>
           <SpecialNewsCard
             id={item.id}
@@ -138,7 +138,7 @@ export default function SpecialNewsSection() {
               768: { slidesPerView: 3 },
               996: { slidesPerView: 4 },
             }}
-            dir="ltr"
+            key={document.dir}
             navigation
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
