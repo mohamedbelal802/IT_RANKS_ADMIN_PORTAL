@@ -17,6 +17,12 @@ import {
 } from "../../../utils/config";
 import QuickAccessCard from "../cards/QuickAccessCard";
 import Alert from "./Alert";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createQuickAccess,
+  deleteQuickAccess,
+  updateQuickAccess,
+} from "../../../store/quickaccess/quickAccessSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -28,21 +34,48 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 const validationsForm = yup.object({
   title: yup.string().required("Required"),
-  system_name: yup.string().required("Required"),
-  icon: yup.number().required("Required"),
+  systemName: yup.string().required("Required"),
+  icon: yup.string().required("Required"),
 });
 export default function QuickAccessModal() {
+  const { list, status } = useSelector((state) => state.quick_access);
   const [searchParams, setSearchParams] = useSearchParams();
   const { state } = useLocation();
   const [alert, setAlert] = React.useState(false);
   const open = searchParams.get("quickaccess") ? true : false;
   // const [open, setOpen] = React.useState(false);
 
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
-      system_name: "",
+      systemName: "",
       title: "",
       icon: "",
+      id: "",
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      if (state?.id) {
+        await dispatch(
+          updateQuickAccess({
+            title: formik.values.title,
+            systemName: formik.values.systemName,
+            icon: formik.values.icon,
+            id: formik.values.id,
+          })
+        );
+      } else {
+        await dispatch(
+          createQuickAccess({
+            title: formik.values.title,
+            systemName: formik.values.systemName,
+            icon: formik.values.icon,
+          })
+        );
+      }
+      setSubmitting(false);
+      handleClose();
     },
     validationSchema: validationsForm,
     validateOnMount: true,
@@ -50,17 +83,20 @@ export default function QuickAccessModal() {
 
   const handleAlertOpen = () => setAlert(true);
   const handleAlertClose = () => setAlert(false);
-  const onDeleteSubmit = () => console.log("deleteSubmited");
+  const onDeleteSubmit = async () => {
+    await dispatch(deleteQuickAccess({ id: state?.id }));
+    handleClose();
+  };
 
   const handleClose = () => {
     formik.setFieldValue("title", "");
-    formik.setFieldValue("system_name", "");
+    formik.setFieldValue("systemName", "");
     formik.setFieldValue("icon", "");
     setSearchParams("");
   };
   const quickAccessList = quickAccessDefultConfig.map((item, index) => {
     const isDisabled =
-      quickAccessConfig.findIndex((it) => it.iconId === item.id) >= 0
+      list.findIndex((it) => it.icon === item.id.toString()) >= 0
         ? true
         : false;
     return (
@@ -82,11 +118,13 @@ export default function QuickAccessModal() {
       </div>
     );
   });
+
   React.useEffect(() => {
     if (state?.title) {
       formik.setFieldValue("title", state.title);
-      formik.setFieldValue("system_name", state.system_name);
-      formik.setFieldValue("icon", state.iconId);
+      formik.setFieldValue("systemName", state.systemName);
+      formik.setFieldValue("icon", state.icon);
+      formik.setFieldValue("id", state.id);
     }
   }, [state]);
   return (
@@ -199,8 +237,8 @@ export default function QuickAccessModal() {
             </label>
             <input
               onChange={formik.handleChange}
-              value={formik.values.system_name}
-              name="system_name"
+              value={formik.values.systemName}
+              name="systemName"
               style={{
                 width: "100%",
                 padding: "10px 8px",
@@ -240,12 +278,12 @@ export default function QuickAccessModal() {
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={!formik.isValid}
+            disabled={!formik.isValid || formik.isSubmitting}
             variant="contained"
             color="primary"
             sx={{ marginLeft: "auto" }}
             autoFocus
-            onClick={handleClose}
+            onClick={formik.submitForm}
           >
             حفظ
           </Button>

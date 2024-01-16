@@ -66,7 +66,7 @@ export default function SocialModal() {
   React.useEffect(() => {
     if (state?.name) {
       formik.setFieldValue("title", state?.name);
-      formik.setFieldValue("url", state.href);
+      formik.setFieldValue("url", state?.href || "");
     }
   }, [state]);
   return (

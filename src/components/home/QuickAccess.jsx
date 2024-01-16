@@ -7,23 +7,23 @@ import QuickAccessCard from "../ui/cards/QuickAccessCard";
 
 import addIcon from "../../assets/icons/secondary-add.svg";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function QuickAccess() {
+  const { list, status } = useSelector((state) => state.quick_access);
   const [t] = useTranslation("global");
   const navigate = useNavigate();
 
-  const cardList = quickAccessConfig.map((item, index) => {
-    const icon = quickAccessDefultConfig.find((it) => it.id === item.iconId);
+  const cardList = list.map((item) => {
+    const icon = quickAccessDefultConfig.find(
+      (it) => it.id.toString() === item?.icon
+    );
     return (
       <div
-        key={index}
+        key={item.id + item.title}
         onClick={() => navigate("?quickaccess=true", { state: item })}
       >
-        <QuickAccessCard
-          key={index}
-          icon={icon.icon}
-          background={icon.background}
-        />
+        <QuickAccessCard icon={icon.icon} background={icon.background} />
       </div>
     );
   });

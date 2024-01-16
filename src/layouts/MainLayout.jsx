@@ -11,6 +11,8 @@ import { getAllAnnouncement } from "../store/announcements/announcementSlice";
 import EditAnnouncmentsModal from "../components/ui/modals/EditAnnouncmentsModal";
 import { getAllSocialMedia } from "../store/socialMedia/socialMediaSlice";
 import SocialModal from "../components/ui/modals/SocialModal";
+import { getAllQuickAccess } from "../store/quickaccess/quickAccessSlice";
+import QuickAccessModal from "../components/ui/modals/QuickAccessModal";
 
 export default function MainLayout() {
   const { user } = useSelector((state) => state.user);
@@ -21,6 +23,7 @@ export default function MainLayout() {
     dispatch(getAllNews());
     dispatch(getAllAnnouncement());
     dispatch(getAllSocialMedia());
+    dispatch(getAllQuickAccess());
   }, []);
 
   return (
@@ -34,8 +37,8 @@ export default function MainLayout() {
       <CreateAnnouncmentsModal />
       <EditAnnouncmentsModal />
       <SocialModal />
-      {/* <QuickAccessModal />
-      <WallpaperModal /> */}
+      <QuickAccessModal />
+      {/*      <WallpaperModal /> */}
     </>
   );
 }

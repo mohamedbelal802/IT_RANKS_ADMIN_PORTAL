@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import quickAccessServices from "./quickAccessService";
+import { successToast } from "../../utils/toasts";
 
 const INITIAL_STATE = {
   status: "idle",
@@ -19,16 +20,49 @@ export const getAllQuickAccess = createAsyncThunk(
   }
 );
 
+export const createQuickAccess = createAsyncThunk(
+  "/quick_access/create",
+  async ({ title, icon, systemName }, thunkApi) => {
+    try {
+      const { data } = await quickAccessServices.createQuickAccess(
+        title,
+        systemName,
+        icon
+      );
+      successToast(data);
+      thunkApi.dispatch(getAllQuickAccess());
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteQuickAccess = createAsyncThunk(
+  "/quick_access/delete",
+  async ({ id }, thunkApi) => {
+    try {
+      const { data } = await quickAccessServices.deleteQuickAccess(id);
+      successToast(data);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
 export const updateQuickAccess = createAsyncThunk(
   "/quick_access/update",
-  async ({ title, iconId, systemName }, thunkApi) => {
+  async ({ title, icon, id, systemName }, thunkApi) => {
     try {
-      const { data } = quickAccessServices.updateQuickAccess(
-        iconId,
+      const { data } = await quickAccessServices.updateQuickAccess(
+        id,
+        icon,
         title,
         systemName
       );
-      console.log(data);
+      successToast(data);
+      thunkApi.dispatch(getAllQuickAccess());
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -47,9 +81,15 @@ const quickAccessSlice = createSlice({
       })
       .addCase(getAllQuickAccess.fulfilled, (state, action) => {
         state.status = "success";
+        state.list = action.payload;
       })
       .addCase(getAllQuickAccess.rejected, (state, action) => {
         state.status = "error";
+      })
+      .addCase(deleteQuickAccess.fulfilled, (state, action) => {
+        state.list = state.list.filter(
+          (item) => item.id.toString() === action.meta.arg.id.toString()
+        );
       });
   },
 });

@@ -23,6 +23,7 @@ export default function Alert({ open, handleClose, title, text, onSubmit }) {
   const onDeleteSubmit = async () => {
     setIsLoading(true);
     await onSubmit();
+    handleClose();
     setIsLoading(false);
   };
   return (
